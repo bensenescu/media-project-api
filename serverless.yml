@@ -1,0 +1,27 @@
+org: senescub
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: media-project-api
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-east-1
+
+functions:
+  getAllMedia:
+    handler: handler.getAllMedia
+    events: 
+      - http: 
+          path: /media
+          method: get
+
+
+        
