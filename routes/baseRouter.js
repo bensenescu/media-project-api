@@ -1,10 +1,13 @@
-'use strict'
-
-const router = express.Router();
-
+const express = require('express');
 const mediaRouter = require('./mediaRouter');
 
-router.use('/media', mediaRouter);
+const baseRouter = express.Router();
 
-export default router;
+mediaRouter.use('/media', mediaRouter);
 
+mediaRouter.get('/hello', (req, res) => {
+  res.send('baseRouter hellpo');
+});
+
+
+module.exports = baseRouter;

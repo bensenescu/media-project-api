@@ -1,10 +1,19 @@
+const serverless = require('serverless-http');
 const express = require('express');
 
-const router = express.Router();
-const mediaController = require('../controllers/mediaController');
+const app = express();
+const mediaController = require('./controllers/mediaController');
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.get('/hello', (req, res) => {
+  res.send('hello');
+});
 
 // act on all media in the database
-router.route('/')
+app.route('/api/media')
 // QUERY PARAMETERS
 // username: gives you all media made by a user
 // quantity: quantity to get back, default most recent 20
@@ -12,9 +21,9 @@ router.route('/')
   .post(mediaController.createMedia);
 
 // act on an individual piece of media,
-router.route('/:mediaId')
+app.route('/api/media/:mediaId')
   .get(mediaController.getMedia)
   .post(mediaController.updateMedia)
   .delete(mediaController.deleteMedia);
 
-module.exports = router;
+module.exports.handler = serverless(app);
