@@ -1,5 +1,9 @@
 const serverless = require('serverless-http');
 const express = require('express');
+const AWS = require('aws-sdk');
+
+const credentials = new AWS.SharedIniFileCredentials();
+AWS.config.credentials = credentials;
 
 const app = express();
 const mediaController = require('./controllers/mediaController');
@@ -26,4 +30,5 @@ app.route('/api/media/:mediaId')
   .post(mediaController.updateMedia)
   .delete(mediaController.deleteMedia);
 
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
 module.exports.handler = serverless(app);

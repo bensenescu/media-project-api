@@ -9,7 +9,7 @@ const getAllMedia = async (event, context, callback) => {
   };
 
   try {
-    const res = await dynamoDb.get(params).promise();
+    const res = await dynamoDb.scan(params).promise();
     callback(null, res);
   } catch (error) {
     callback(error, null);

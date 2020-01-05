@@ -2,7 +2,7 @@ service: media-project-api
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs13.*
   stage: dev
   region: us-east-1
   iamRoleStatements:
@@ -17,7 +17,7 @@ provider:
       Resource:
         - { "Fn::GetAtt": ["UsersDynamoDBTable", "Arn" ] }
   environment:
-    USERS_TABLE: ${self:custom.tableName}
+    USERS_TABLE: Media
 
 
 functions:
@@ -46,4 +46,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.tableName}
+        TableName: Media
