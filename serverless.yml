@@ -1,27 +1,49 @@
-org: senescub
-# Welcome to serverless. Read the docs
-# https://serverless.com/framework/docs/
-
-# Serverless.yml is the configuration the CLI
-# uses to deploy your code to your provider of choice
-
-# The `service` block is the name of the service
 service: media-project-api
 
-# The `provider` block defines where your service will be deployed
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs13.*
   stage: dev
   region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["UsersDynamoDBTable", "Arn" ] }
+  environment:
+    USERS_TABLE: Media
+
 
 functions:
-  getAllMedia:
-    handler: handler.getAllMedia
-    events: 
-      - http: 
-          path: /media
-          method: get
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
 
-
-        
+resources:
+  Resources:
+    UsersDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: name
+            AttributeType: S
+          -
+            AttributeName: description
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: username
+            KeyType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: Media
