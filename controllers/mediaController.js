@@ -21,6 +21,7 @@ const getAllMedia = async (req, res) => {
 const createMedia = async (req, res) => {
   const item = req.body;
   item.id = uuidv1();
+  item.uploadDate = new Date().toString();
 
   const params = {
     TableName,

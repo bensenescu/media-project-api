@@ -1,6 +1,8 @@
 # package directories
 node_modules
 jspm_packages
+.elasticbeanstalk/
 
 # Serverless directories
 .serverless
+.DS_Store

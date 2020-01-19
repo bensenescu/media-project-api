@@ -1,14 +1,20 @@
 const express = require('express');
 const AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const credentials = new AWS.SharedIniFileCredentials();
-AWS.config.credentials = credentials;
+const envConfig = require('./config/envConfig');
+
+const { awsCredentials } = envConfig;
+
+// eslint-disable-next-line max-len
+AWS.config.credentials = new AWS.Credentials(awsCredentials.accessKeyId, awsCredentials.secretAccessKey, null);
 AWS.config.region = 'us-east-1';
 
 const app = express();
 const mediaRouter = require('./routes/mediaRouter');
 
+app.use(cors());
 app.use(bodyParser.json({ extended: true }));
 
 app.get('/', (req, res) => {
@@ -16,8 +22,5 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', mediaRouter);
-
-// eslint-disable-next-line no-console
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
 
 module.exports = app;
